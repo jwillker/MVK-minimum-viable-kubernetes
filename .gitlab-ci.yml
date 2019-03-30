@@ -1,8 +1,10 @@
-image:
-  name: hashicorp/terraform:0.11.9
+.terraform_job &terraform_def
+  image: hashicorp/terraform:0.11.9
   entrypoint:
     - '/usr/bin/env'
     - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+  before_script:
+    - terraform init
 
 stages:
   - validate
@@ -11,28 +13,28 @@ stages:
   - destroy
 
 validate:
+  <<: *terraform_def
   stage: validate
   script:
-    - terraform init
     - terraform validate .
   allow_failure: true
 
 plan:
+  <<: *terraform_def
   stage: plan
   script:
-    - terraform init
     - terraform plan
 
 apply:
+  <<: *terraform_def
   stage: apply
   script:
-    - terraform init
     - terraform apply -auto-approve
   when: manual
 
 destroy:
+  <<: *terraform_def
   stage: destroy
   script:
-    - terraform init
     - terraform destroy -auto-approve
   when: manual
