@@ -13,30 +13,6 @@ terraform {
     region = "us-east-1"
   }
 }
-resource "aws_instance" "k8s" {
-  ami           = "ami-0565af6e282977273"
-  instance_type = "t2.medium"
-  count         = 3
-  vpc_security_group_ids = ["${aws_security_group.kubernetes.id}"]
-  key_name      = "${var.AWS_SSH_KEY_NAME}"
-  
-  tags {
-    Name = "Kubernetes-Cluster"
-  }
-}
-
-resource "aws_security_group" "kubernetes" {
-  name = "kubernetes-sg"
-
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
 
 
-output "public_ip" {
-  value = "${aws_instance.k8s.*.public_ip}"
-}
+
