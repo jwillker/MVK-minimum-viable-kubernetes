@@ -1,41 +1,42 @@
-.terraform_job &terraform_def
-  image: hashicorp/terraform:0.11.9
-  entrypoint:
-    - '/usr/bin/env'
-    - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
-  before_script:
-    - cd aws_provision
-    - terraform init
-
 stages:
   - validate
   - plan
   - apply
   - destroy
 
-validate:
-  <<: *terraform_def
+.terraform_job: &terraform_def
+  image:
+    name: hashicorp/terraform:0.11.9
+    entrypoint:
+      - '/usr/bin/env'
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+  before_script:
+    - cd aws_provision
+    - terraform init
+
+terraform:validate:
   stage: validate
+  <<: *terraform_def
   script:
     - terraform validate .
   allow_failure: true
 
-plan:
-  <<: *terraform_def
+terraform:plan:
   stage: plan
+  <<: *terraform_def
   script:
     - terraform plan
 
-apply:
-  <<: *terraform_def
+terraform:apply:
   stage: apply
+  <<: *terraform_def
   script:
     - terraform apply -auto-approve
   when: manual
 
-destroy:
-  <<: *terraform_def
+terraform:destroy:
   stage: destroy
+  <<: *terraform_def
   script:
     - terraform destroy -auto-approve
   when: manual
