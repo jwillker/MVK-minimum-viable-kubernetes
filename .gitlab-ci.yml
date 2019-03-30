@@ -4,6 +4,7 @@
     - '/usr/bin/env'
     - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   before_script:
+    - cd aws_provision
     - terraform init
 
 stages:
