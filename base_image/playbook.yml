@@ -23,7 +23,6 @@
         'curl',
         'software-properties-common'
         ]
-
         state: present
 
     - name: Add Docker’s official GPG key
