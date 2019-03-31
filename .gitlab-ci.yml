@@ -1,10 +1,12 @@
 stages:
+  - build
   - validate
   - plan
   - apply
   - destroy
 
 buil_ami_base:
+  stage: build
   image:
     name: hashicorp/packer:light
     entrypoint:
