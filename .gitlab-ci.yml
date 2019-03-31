@@ -5,7 +5,7 @@ stages:
   - apply
   - destroy
 
-buil_ami_base:
+build_ami_base:
   stage: build
   image:
     name: hashicorp/packer:light
@@ -14,7 +14,7 @@ buil_ami_base:
       - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   before_script:
     - cd base_image 
-    - echo $BASTION | base64 --decode > Bastion_Key.pem
+    - echo $BASTION | base64 -d > Bastion_Key.pem
     - chmod 400 Bastion_Key.pem 
   script:
     - packer build packer.json
