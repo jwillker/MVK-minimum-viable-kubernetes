@@ -4,6 +4,22 @@ stages:
   - apply
   - destroy
 
+buil_ami_base:
+  image:
+    name: hashicorp/packer:light
+    entrypoint:
+      - '/usr/bin/env'
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+    before_script:
+      - cd base_image 
+      - echo $BASTION | base64 --decode > Bastion_Key.pem
+      - chmod 400 Bastion_Key.pem 
+    script:
+      - packer build packer.json
+    only:
+      changes:
+        - base_image/*
+
 .terraform_job: &terraform_def
   image:
     name: hashicorp/terraform:0.11.9
