@@ -23,7 +23,7 @@
             "ssh_username": "ubuntu",
             "type": "amazon-ebs",
             "ssh_keypair_name": "Bastion_Key",
-            "ssh_private_key_file": "./Bastion_Key.pem",
+            "ssh_private_key_file": "/Users/jhonn/code/Bastion_Key.pem",
             "tags": {
                 "Name": "K8s-base-Packer-Ansible"
             }

@@ -15,7 +15,7 @@ data "aws_ami" "k8s-base" {
 
 resource "aws_instance" "k8s_masters" {
   ami           = "${data.aws_ami.k8s-base.id}"
-  instance_type = "t2.micro"
+  instance_type = "t2.medium"
   count         = 1
   vpc_security_group_ids = [
     "${aws_security_group.k8s-ssh.id}",
@@ -35,7 +35,7 @@ resource "aws_instance" "k8s_masters" {
 
 resource "aws_instance" "k8s_nodes" {
   ami           = "${data.aws_ami.k8s-base.id}"
-  instance_type = "t2.micro"
+  instance_type = "t2.medium"
   count         = 2
   vpc_security_group_ids = [
     "${aws_security_group.k8s-ssh.id}",

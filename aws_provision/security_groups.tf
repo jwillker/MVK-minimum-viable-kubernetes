@@ -51,6 +51,13 @@ resource "aws_security_group" "k8s-master-sg" {
     cidr_blocks = ["0.0.0.0/0"]
     description = "kube-controller-manager"
   }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 resource "aws_security_group" "k8s-node-sg" {
@@ -70,5 +77,12 @@ resource "aws_security_group" "k8s-node-sg" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
     description = "NodePorts"
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
