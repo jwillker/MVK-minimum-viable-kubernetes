@@ -42,10 +42,3 @@
       command: kubectl apply -f /home/ubuntu/canal.yml 
       environment:
         KUBECONFIG: /etc/kubernetes/admin.conf
-
-    - shell: kubeadm token create --print-join-command > /home/ubuntu/join
-
-    - fetch:
-        src: /home/ubuntu/join
-        dest: join
-        flat: yes
