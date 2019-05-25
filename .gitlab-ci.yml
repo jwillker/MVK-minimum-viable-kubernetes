@@ -1,12 +1,12 @@
 stages:
-  - build
-  - validate
-  - plan
-  - apply
-  - destroy
+  - Build
+  - Plan and Validate
+  - Deploy Infra
+  - Deploy K8s 
+  - Destroy Infra
 
-build_ami_base:
-  stage: build
+Build:AWS:AMI:
+  stage: Build
   image:
     name: hashicorp/packer:light
     entrypoint:
@@ -32,28 +32,41 @@ build_ami_base:
     - cd aws_provision
     - terraform init
 
-terraform:validate:
-  stage: validate
+Infra:Terraform:Validate:
+  stage: Plan and Validate
   <<: *terraform_def
   script:
     - terraform validate .
-  allow_failure: true
 
-terraform:plan:
-  stage: plan
+Infra:Terraform:Plan:
+  stage: Plan and Validate 
   <<: *terraform_def
   script:
     - terraform plan
 
-terraform:apply:
-  stage: apply
+Infra:Terraform:Apply:
+  stage: Deploy Infra
   <<: *terraform_def
   script:
     - terraform apply -auto-approve
   when: manual
+  artifacts:
+    paths:
+      - kubeadm_create/hosts
 
-terraform:destroy:
-  stage: destroy
+Infra:Ansible:K8s-Deploy-Cluster:
+  stage: Deploy K8s 
+  before_script:
+    - cd kubeadm_create
+    - echo $BASTION | base64 -d > Bastion_Key.pem
+    - chmod 400 Bastion_Key.pem 
+
+  script:
+    - ansible-playbook -i hosts master.yml
+    - ansible-playbook -i hosts nodes.yml
+
+Terraform:destroy:
+  stage: Destroy Infra
   <<: *terraform_def
   script:
     - terraform destroy -auto-approve
