@@ -55,6 +55,7 @@ Infra:Terraform:Apply:
       - kubeadm_create/hosts
 
 Infra:Ansible:K8s-Deploy-Cluster:
+  image: ansible/ansible-runner
   stage: Deploy K8s 
   before_script:
     - cd kubeadm_create
